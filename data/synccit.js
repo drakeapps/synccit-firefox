@@ -8,7 +8,7 @@ var referral = localStorage['referral'];
 
 //console.log(username + ' '+ auth + ' ' + api);
 
-var devname = "synccit-firefox,v1.3";
+var devname = "synccit-firefox,v1.7";
 
 // add addStyle if doesn't exist
 // if doesn't have xmlHttpRequest, that's a whole other issue
@@ -30,10 +30,14 @@ if(localStorage['synccit-self'] == "undefined" || localStorage['synccit-self'] =
 	localStorage['synccit-self'] = "";
 }//
 
+if(localStorage['api'] == "http://api.synccit.com/api.php") {
+    localStorage['api'] = "https://api.synccit.com/api.php";
+}
+
 if(username == undefined || username == "undefined") {
 	if(localStorage['api'] == undefined) {
 		console.log('api undefined');
-		localStorage['api'] = "http://api.synccit.com/api.php";
+		localStorage['api'] = "https://api.synccit.com/api.php";
 	}
 	showPage();
 }
@@ -606,7 +610,7 @@ function showPage() {
 	if(auth == undefined)
 		auth = '';
 	if(api == undefined)
-		api = 'http://api.synccit.com/api.php';
+		api = 'https://api.synccit.com/api.php';
 	if(referral == undefined)
 		referral = true;
 	var checkbox = "checked =\"checked\"";
@@ -626,9 +630,9 @@ function showPage() {
 	localStorage[\'referral\'] = document.getElementById(\'referral\').checked; \
 	window.location.reload(); \
 	 " onclick="" id="save" ><h2>save</h2></a><br><br><br> \
-	<h3>api location (default http://api.synccit.com/api.php)</h3><br> \
+	<h3>api location (default https://api.synccit.com/api.php)</h3><br> \
 	<input type="text" id="api" value="'+api+'"><br><br> \
-	<h2><a href="http://synccit.com/create.php" target="_blank">signup</a></h2><br><br> \
+	<h2><a href="https://synccit.com/create.php" target="_blank">signup</a></h2><br><br> \
 	<em>to get rid of this, put something in username and auth or uninstall synccit extension/script</em> \
 	</div>';
 	return false;
