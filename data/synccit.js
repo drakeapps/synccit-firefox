@@ -136,30 +136,29 @@ else {
 
 	//console.log(array.toString());
 
-	var datastring = "username=" + username + "&auth=" + auth + "&dev=" + devname + "&mode=read" + "&links=" + array.toString();
+    var content = {
+        username: username,
+        auth: auth,
+        dev: devname,
+        mode: "read",
+        links: array.toString()
+    };
 
-	//console.log(datastring);
-
-	// download visited links
+    // download visited links
 	// this is using the regular mode, not json
 	// didn't have json implemented yet server side
-	GM_xmlhttpRequest({
-	  method: "POST",
-	  url: api,
-	  data: datastring,
-	  headers: {
-	    "Content-Type": "application/x-www-form-urlencoded"
-	  },
-	  onload: function(response) {
+	self.port.emit("apiPostRequest", {
+        url: api,
+        content: content
+    });
+    self.port.once("onApiRequestComplete", function(responseText) {
 	    /*if (response.responseText.indexOf("Logged in as") > -1) {
 	      location.href = "http://www.example.net/dashboard";
 	    }*/
 		
-		//console.log(response.responseText);
+		//console.log(responseText);
 
-		parseLinks(response.responseText);
-
-	  }
+		parseLinks(responseText);
 	});
 
 
@@ -402,22 +401,25 @@ function addSelf(link, count) {
 }
 
 function clickedLink(link) {
-	
-	var datastring = "username=" + username + "&auth=" + auth + "&dev=" + devname + "&mode=update" + "&links=" + link;
-	//console.log(datastring);
-	GM_xmlhttpRequest({
-	  method: "POST",
-	  url: api,
-	  data: datastring,
-	  headers: {
-	    "Content-Type": "application/x-www-form-urlencoded"
-	  },
-	  onload: function(response) {
+
+    var content = {
+        username: username,
+        auth: auth,
+        dev: devname,
+        mode: "update",
+        links: link
+    };
+
+	self.port.emit("apiPostRequest", {
+        url: api,
+        content: content
+    });
+    self.port.once("onApiRequestComplete", function(responseText) {
 	    /*if (response.responseText.indexOf("Logged in as") > -1) {
 	      location.href = "http://www.example.net/dashboard";
 	    }*/
 		
-		console.log(response.responseText);
+		console.log(responseText);
 		var array = localStorage['synccit-link'].split(',');
 		if(array.length < 2) {
 			localStorage['synccit-link'] = "";
@@ -436,9 +438,8 @@ function clickedLink(link) {
 		}
 		return true;
 
-		//parseLinks(response.responseText);
+		//parseLinks(responseText);
 
-	  }
 	});
 
 	
@@ -446,21 +447,24 @@ function clickedLink(link) {
 }
 
 function clickedComment(link, count) {
-	var datastring = "username=" + username + "&auth=" + auth + "&dev=" + devname + "&mode=update" + "&comments=" + link + ":" + count;
+    var content = {
+        username: username,
+        auth: auth,
+        dev: devname,
+        mode: "update",
+        comments: link + ":" + count
+    };
 
-	GM_xmlhttpRequest({
-	  method: "POST",
-	  url: api,
-	  data: datastring,
-	  headers: {
-	    "Content-Type": "application/x-www-form-urlencoded"
-	  },
-	  onload: function(response) {
+    self.port.emit("apiPostRequest", {
+        url: api,
+        content: content
+    });
+    self.port.once("onApiRequestComplete", function(responseText) {
 	    /*if (response.responseText.indexOf("Logged in as") > -1) {
 	      location.href = "http://www.example.net/dashboard";
 	    }*/
 		
-		console.log(response.responseText);
+		console.log(responseText);
 		var array = localStorage['synccit-comment'].split(',');
 		//console.log(array.toString());
 		if(array.length < 2) {
@@ -480,29 +484,32 @@ function clickedComment(link, count) {
 			localStorage['synccit-comment'] = array.toString();
 		}
 		return true;
-		//parseLinks(response.responseText);
+		//parseLinks(responseText);
 
-	  }
 	});
 
 }
 
 function clickedSelf(link, count) {
-	var datastring = "username=" + username + "&auth=" + auth + "&dev=" + devname + "&mode=update" + "&links=" + link + "&comments=" + link + ":" + count;
+    var content = {
+        username: username,
+        auth: auth,
+        dev: devname,
+        mode: "update",
+        links: link,
+        comments: link + ":" + count
+    };
 
-	GM_xmlhttpRequest({
-	  method: "POST",
-	  url: api,
-	  data: datastring,
-	  headers: {
-	    "Content-Type": "application/x-www-form-urlencoded"
-	  },
-	  onload: function(response) {
+    self.port.emit("apiPostRequest", {
+        url: api,
+        content: content
+    });
+    self.port.once("onApiRequestComplete", function(responseText) {
 	    /*if (response.responseText.indexOf("Logged in as") > -1) {
 	      location.href = "http://www.example.net/dashboard";
 	    }*/
 		
-		console.log(response.responseText);
+		console.log(responseText);
 		var array = localStorage['synccit-self'].split(',');
 		if(array.length < 2) {
 			localStorage['synccit-self'] = "";
@@ -521,9 +528,8 @@ function clickedSelf(link, count) {
 			localStorage['synccit-self'] = array.toString();
 		}
 		return true;
-		//parseLinks(response.responseText);
+		//parseLinks(responseText);
 
-	  }
 	});
 }
 
